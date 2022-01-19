@@ -1,0 +1,12 @@
+.cell {
+				width: 10px;
+				height: 10px;
+				border: 1px solid #6b6b6b;
+				background-color: white;
+}
+#drawing-table {
+				display: grid;
+				grid-template-columns: repeat(10, 11px);
+				grid-template-rows: repeat(10, 11px);
+				user-select: none;
+}
