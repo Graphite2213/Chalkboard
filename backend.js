@@ -1,9 +1,9 @@
-const password = "qH5wLEAtsgmPLqS3bzghdkteMjWa5jnS46DzQtmVDpVJy9mks93s9dWuzMPVdE8j";
+const password = require("./creds.json").password;
 const Keyv = require("keyv");
 const keyv = new Keyv(`mysql://root:${password}@localhost:3306/website3`);
 const http = require('http');
 const ws = require('ws');
-// const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
 async function firstTime() {
   let table = await keyv.get("main");
@@ -28,46 +28,61 @@ async function firstTime() {
 connectionss1 = [];
 connectionss2 = [];
 connectionss3 = [];
-connectionss2 = [];
+connectionss4 = [];
 connectionss5 = [];
 const wss = new ws.WebSocketServer({ port: 8081 });
 
 wss.on('connection', (con) => {
   con.on('message', async (data) => {
+    data = JSON.parse(data.toString());
     let table = await keyv.get("main");
     if (data.com == "init") {
       retobj = {
         uuid: uuidv4(),
         server: data.server,
         connection: con,
-        matrix: table[data.server]
+        matrix: table[data.server],
+        firstTime: 1,
       };
       getSS(data.server).unshift({connection: con, uuid: retobj.uuid});
-      con.send(retobj);
+      con.send(JSON.stringify(retobj));
     }
     else if (data.com == "update") {
-      table[data.server] = data.matrix;
-      for (let i = 0; i < getSS(data.server).length(); i++) {
-        getSS(data.server).connection.send({matrix: table[data.server]});
-      }
+      table[data.server][data.locx][data.locy] = data.material;
+      console.log(data.material);
+      keyv.set("main", table);
+      wss.clients.forEach(function each(client) {
+      if (client !== con && client.readyState === ws.WebSocket.OPEN) {
+        client.send(JSON.stringify({material: data.material, locx: data.locx, locy: data.locy, server: data.server}), { binary: false });
+        }
+      });
     }
     else if (data.com == "serverswap") {
       getSS(data.prevserv).splice(getSS(data.prevserv).findIndex({connection: data.con, uuid: data.id}));
       getSS(data.newserv).unshift({connection: data.con, uuid: data.id});
-      data.con.send({matrix: table[data.newserv]});
+      data.con.send(JSON.stringify({matrix: table[data.newserv]}));
     }
   });
+  
+  
+  con.on('close', (las) => {
+    let fullar = [connectionss1, connectionss2, connectionss3, connectionss4, connectionss5];
+    
+    for (item of fullar) {
+      for (let i = 0; i < item.length; i++) { 
+        if (item[i].connection._socket == las._socket) {
+          item.splice(i, 1);
+        }
+      }
+    }
+    connectionss1 = fullar[0];
+    connectionss2 = fullar[1];
+    connectionss3 = fullar[2];
+    connectionss4 = fullar[3];
+    connectionss5 = fullar[4];
+});
 });
 
-const requestListener = function (req, res) {
-    res.writeHead(200);
-    res.end("My first server!");
-};
-
-const server = http.createServer(requestListener);
-server.listen(8088, "192.168.1.2", () => {
-    console.log(`Server is running on http://localhost:${8088}`);
-});
 function getSS (server) {
   switch (server) {
         case "server1":
