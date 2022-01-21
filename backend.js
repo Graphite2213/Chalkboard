@@ -5,6 +5,9 @@ const http = require('http');
 const ws = require('ws');
 const { v4: uuidv4 } = require('uuid');
 
+//keyv.set("main", {});
+//firstTime();
+
 async function firstTime() {
     let table = await keyv.get("main");
     let empty = [];
@@ -30,7 +33,7 @@ connectionss2 = [];
 connectionss3 = [];
 connectionss4 = [];
 connectionss5 = [];
-const wss = new ws.WebSocketServer({ port: 8081 });
+const wss = new ws.WebSocketServer({ port: 8029 });
 
 wss.on('connection', (con) => {
     con.on('message', async(data) => {

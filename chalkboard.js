@@ -5,7 +5,8 @@ let UUID = 0;
 let gridON = true;
 let changes = [];
 
-let socket = new WebSocket("ws://192.168.0.103:8081");
+let socket = new WebSocket("ws://nullsmc.ddns.net:8029");
+
 
 
 function makeBoard(width, height) {
@@ -106,11 +107,11 @@ function showGrid() {
     }
 }
 
-function addBorder() {
+function addBorder(elem) {
     document.getElementById("tGrid").style.border = "2px solid rgb(17, 78, 199)";
 }
 
-function removeBorder() {
+function removeBorder(elem) {
     if (!gridON) {
         document.getElementById("tGrid").style.border = "2px solid transparent";
     }
