@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-				<meta charset="UTF-8">
-				<title>Chalkboard</title>
-				<link rel="stylesheet" href="chalkboard.css">
+    <meta charset="UTF-8">
+    <title>Chalkboard</title>
+    <link rel="stylesheet" href="chalkboard.css">
 </head>
+
 <body>
-				<div id="drawing-table">
-				</div>
-				<div id="toolbox">
-				  <div id="colorpicker"></div>
-				</div>
-				<script src="chalkboard.js"></script>
+    <div id="drawing-table">
+    </div>
+    <div id="toolbox">
+        <div id="tGrid" onclick="showGrid()" onmouseover="addBorder()" onmouseout="removeBorder()"> ▦ </div>
+        <input id="cPicker" value="#000000" data-jscolor="{}" onchange="updateColor(this.value)">
+    </div>
+    <script src="chalkboard.js"></script>
+    <script src="jscolor.js"></script>
 </body>
+
 </html>

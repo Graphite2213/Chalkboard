@@ -2,64 +2,116 @@ let color = "#000000";
 let curserver = 'server1';
 let con;
 let UUID = 0;
+let gridON = true;
+let changes = [];
 
-let socket = new WebSocket("ws://192.168.1.2:8081");
+let socket = new WebSocket("ws://192.168.0.103:8081");
 
 
 function makeBoard(width, height) {
-	let inHTML = "";
-	for (let i = 0; i < height; i++) {
-			for (let j = 0; j < width; j++) {
-			  console.log(i + " " + j)
-		    inHTML += `<div class="cell ${j}/${i}" style="background-color: ${matrix[j][i]}">&nbsp;</div>`;
-			}
-	}
-				
-   let wi = "";
-   for (let i = 0; i < width; i++) {
-			wi += "10px "
-   }
- document.getElementById("drawing-table").style.gridTemplateColumns = wi;
- 
- document.getElementById("drawing-table").innerHTML = inHTML;
+    let inHTML = "";
+    for (let i = 0; i < height; i++) {
+        for (let j = 0; j < width; j++) {
+            inHTML += `<div class="cell ${j}/${i}" style="background-color: ${matrix[j][i]}"> </div>`;
+        }
+    }
+
+    let wi = "";
+    for (let i = 0; i < width; i++) {
+        wi += "10px "
+    }
+    document.getElementById("drawing-table").style.gridTemplateColumns = wi;
+
+    document.getElementById("drawing-table").innerHTML = inHTML;
+}
+
+function updateColor(colo) {
+    color = colo;
 }
 
 document.getElementById("drawing-table").addEventListener("click", (e) => {
-		e.target.style.backgroundColor = color
+    if (!e.target.classList.contains("cell")) return;
+    e.target.style.backgroundColor = color
     let splitAr = e.target.classList.item(1).split("/");
-    console.log(color);
     matrix[splitAr[0]][splitAr[1]] = color;
-    socket.send(JSON.stringify({com: "update", material: color, locx: splitAr[0], locy: splitAr[1], server: curserver}))
+    socket.send(JSON.stringify({ com: "update", materials: [{ material: color, locx: splitAr[0], locy: splitAr[1], server: curserver }] }));
 });
 
-socket.onopen = function (e) {
-  socket.send(JSON.stringify({com: "init", server: curserver}));
+function dragOn(e) {
+    if (!e.target.classList.contains("cell")) return;
+
+    e.target.style.backgroundColor = color
+    let splitAr = e.target.classList.item(1).split("/");
+    matrix[splitAr[0]][splitAr[1]] = color;
+    changes.unshift({ com: "update", material: color, locx: splitAr[0], locy: splitAr[1], server: curserver });
+}
+
+document.getElementById("drawing-table").addEventListener("mousedown", () => {
+    document.getElementById("drawing-table").addEventListener("mousemove", dragOn);
+});
+document.addEventListener("mouseup", () => {
+    document.getElementById("drawing-table").removeEventListener("mousemove", dragOn);
+    socket.send(JSON.stringify({ com: "update", materials: changes }));
+    changes = [];
+});
+
+socket.onopen = function(e) {
+    socket.send(JSON.stringify({ com: "init", server: curserver }));
 };
 
-socket.onclose = function (e) {
-  alert("Connection to the server has been lost, please refresh your web page");
+socket.onclose = function(e) {
+    alert("Connection to the server has been lost, please refresh your web page");
 };
 
-socket.onmessage = function (e) {
-  e = JSON.parse(e.data);
-  if (e.firstTime != undefined) {
-    UUID = e.uuid;
-    con = e.connection;
-    matrix = e.matrix;
-    makeBoard(70, 30);
-  }
-  else {
-    if (e.server == curserver) {
-      document.getElementsByClassName(`${e.locx}/${e.locy}`)[0].style.backgroundColor = e.material;
+socket.onmessage = function(e) {
+    e = JSON.parse(e.data);
+    if (e.firstTime != undefined) {
+        UUID = e.uuid;
+        con = e.connection;
+        matrix = e.matrix;
+        makeBoard(190, 40);
+    } else {
+        if (e.server == curserver) {
+            for (dat of e.materials) {
+                document.getElementsByClassName(`${dat.data.locx}/${dat.data.locy}`)[0].style.backgroundColor = dat.data.material;
+            }
+        }
     }
-  }
 };
 
 function swapServers(server) {
-  socket.send(JSON.stringify({id: UUID, prevserv: curserv, newserv: server, con: con, com: "serverswap"}));
+    socket.send(JSON.stringify({ id: UUID, prevserv: curserv, newserv: server, con: con, com: "serverswap" }));
 }
 
-function changeColor(clr) {
-  color = clr;
-  alert(clr);
+
+function showGrid() {
+    if (!gridON) {
+        document.getElementById("tGrid").style.backgroundColor = "rgba(48, 96, 191, 0.5)";
+        document.getElementById("tGrid").style.border = "2px solid rgb(17, 78, 199)";
+        const items = document.getElementsByClassName("cell");
+        for (ind of items) {
+            ind.style.borderLeft = "1px solid #6b6b6b";
+            ind.style.borderBottom = "1px solid #6b6b6b";
+        }
+        gridON = true;
+    } else {
+        const items = document.getElementsByClassName("cell");
+        for (ind of items) {
+            ind.style.borderLeft = "none";
+            ind.style.borderBottom = "none";
+        }
+        document.getElementById("tGrid").style.backgroundColor = "transparent";
+        document.getElementById("tGrid").style.border = "2px solid transparent";
+        gridON = false;
+    }
+}
+
+function addBorder() {
+    document.getElementById("tGrid").style.border = "2px solid rgb(17, 78, 199)";
+}
+
+function removeBorder() {
+    if (!gridON) {
+        document.getElementById("tGrid").style.border = "2px solid transparent";
+    }
 }
