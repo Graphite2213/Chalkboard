@@ -3,3 +3,5 @@
 /package.json
 /test.js
 /creds.json
+/certificate.pem
+/key.pem

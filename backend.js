@@ -33,7 +33,17 @@ connectionss2 = [];
 connectionss3 = [];
 connectionss4 = [];
 connectionss5 = [];
-const wss = new ws.WebSocketServer({ port: 8029 });
+
+const https = require('https');
+const fs = require('fs');
+
+
+const server = https.createServer({
+    cert: fs.readFileSync('./certificate.pem'),
+    key: fs.readFileSync('./key.pem')
+}).listen(8029);
+
+const wss = new ws.WebSocket.Server({ server });
 
 wss.on('connection', (con) => {
     con.on('message', async(data) => {
