@@ -1,15 +1,16 @@
 let color = "#000000";
 let curserver = 'server1';
 let con;
+let user = 'Default';
 let tool = "brush";
 let size = 1;
 let UUID = 0;
 let gridON = true;
 let changes = [];
 
-let socket = new WebSocket("wss://192.168.0.100:8029");
+let socket = new WebSocket("wss://nullsmc.ddns.net:8029");
 
-
+user = prompt("Please enter your preferred username:");
 
 function makeBoard(width, height) {
     let inHTML = "";
@@ -120,6 +121,10 @@ socket.onmessage = function(e) {
         con = e.connection;
         matrix = e.matrix;
         makeBoard(190, 40);
+    } else if (e.msg != undefined) {
+        if (e.server == curserver) {
+            addMessage(e.msg, e.user);
+        }
     } else {
         if (e.server == curserver) {
             for (dat of e.materials) {
@@ -173,4 +178,24 @@ function drawSquare(locx, locy) {
 
 function changeSizes() {
     size = parseInt(document.getElementById("sizepicker").value);
+}
+
+document.addEventListener('keypress', sendOnKeypress);
+
+function sendOnKeypress(e) {
+    if (e.code == "Enter") sendMessage();
+}
+
+function sendMessage() {
+    let msg = document.getElementById("chatinput").value;
+    if (msg == "") return;
+    addMessage(msg, user);
+    socket.send(JSON.stringify({ com: "message", msg: msg, user: user, server: curserver }));
+    document.getElementById("chatinput").value = "";
+}
+
+function addMessage(m, u) {
+    let fustr = `<br>${u} >> ${m}`;
+    let addr = document.getElementById("chatbody").innerHTML.concat(fustr).substring(document.getElementById("chatbody").innerHTML.concat(`${fustr}`).length - 850, document.getElementById("chatbody").innerHTML.concat(fustr).length);
+    document.getElementById("chatbody").innerHTML = addr;
 }

@@ -68,20 +68,28 @@ body {
 #inputzone {
     border-top: 2px solid black;
     position: relative;
-    top: 16.5vw;
+    top: 10px;
 }
 
 #chatinput {
-    height: 24px;
+    height: 27px;
     width: 11vw;
     position: relative;
+    border: 1px solid black;
     border-radius: 0px 0px 0px 10px;
+    top: -5px;
+}
+
+#chatbody {
+    word-wrap: break-word;
 }
 
 #sendmessage {
     background-color: rgb(17, 78, 199);
     border-radius: 0px 0px 10px 0px;
-    height: 24px;
-    width: 3.5vw;
+    height: 30px;
+    color: white;
+    font-size: 20px;
+    width: 70px;
     border: none;
 }

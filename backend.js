@@ -73,6 +73,12 @@ wss.on('connection', (con) => {
                     client.send(JSON.stringify(data));
                 }
             });
+        } else if (data.com == "message") {
+            wss.clients.forEach(function each(client) {
+                if (client !== con && client.readyState === ws.WebSocket.OPEN) {
+                    client.send(JSON.stringify({ msg: data.msg, user: data.user, server: data.server }));
+                }
+            });
         }
     });
 
