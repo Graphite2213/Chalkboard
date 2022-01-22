@@ -8,7 +8,7 @@ let UUID = 0;
 let gridON = true;
 let changes = [];
 
-let socket = new WebSocket("wss://nullsmc.ddns.net:8029");
+let socket = new WebSocket("wss://graphote.tech:8029");
 
 user = prompt("Please enter your preferred username:");
 
