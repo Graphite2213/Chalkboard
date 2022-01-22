@@ -44,6 +44,44 @@ body {
     height: 40px;
 }
 
-#tGrid:hover {
-    border: 2px solid rgb(17, 78, 199);
+#cubeSticker {
+    background-color: transparent;
+    border: 2px solid transparent;
+    line-height: 4.4vh;
+    font-size: 40px;
+    height: 40px;
+}
+
+#chatroom {
+    width: 15vw;
+    height: 20vw;
+    border: 3px solid black;
+    border-radius: 10px;
+}
+
+#chatheader {
+    text-align: center;
+    font-size: 30px;
+    border-bottom: 2px solid black;
+}
+
+#inputzone {
+    border-top: 2px solid black;
+    position: relative;
+    top: 16.5vw;
+}
+
+#chatinput {
+    height: 24px;
+    width: 11vw;
+    position: relative;
+    border-radius: 0px 0px 0px 10px;
+}
+
+#sendmessage {
+    background-color: rgb(17, 78, 199);
+    border-radius: 0px 0px 10px 0px;
+    height: 24px;
+    width: 3.5vw;
+    border: none;
 }

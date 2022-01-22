@@ -11,8 +11,27 @@
     <div id="drawing-table">
     </div>
     <div id="toolbox">
-        <div id="tGrid" onclick="showGrid()" onmouseover="addBorder(this)" onmouseout="removeBorder(this)"> ▦ </div>
+        <div id="tGrid" class="hoverable" onclick="showGrid()"> ▦ </div>
+        <!--<div id="cubeSticker" class="hoverable" onclick="switchTO(`square`, this)"> ▢ </div>
+        <div id="cubeSticker" class="hoverable" onclick="switchTO(`brush`, this)"> 🖌 </div>-->
         <input id="cPicker" value="#000000" data-jscolor="{}" onchange="updateColor(this.value)">
+        <select id="sizepicker" onchange="changeSizes()">
+            <option value=" " disabled selected>Change brush size (1 by default)</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select>
+        <select id="serverpicker" onchange="changeServers()">
+            <option value="server1">Server 1</option>
+            <option value="server2">Server 2</option>
+            <option value="server3">Server 3</option>
+            <option value="server4">Server 4</option>
+            <option value="server5">Server 5</option>
+        </select>
+    </div>
+    <div id="chatroom">
+        <div id="chatheader">Chat</div>
+        <div id="chatbody"></div>
+        <div id="inputzone"><input id="chatinput" placeholder="Message #Chat"><button id="sendmessage">➣</button></div>
     </div>
     <script src="chalkboard.js"></script>
     <script src="jscolor.js"></script>

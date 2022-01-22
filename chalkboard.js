@@ -1,11 +1,13 @@
 let color = "#000000";
 let curserver = 'server1';
 let con;
+let tool = "brush";
+let size = 1;
 let UUID = 0;
 let gridON = true;
 let changes = [];
 
-let socket = new WebSocket("wss://nullsmc.ddns.net:8029");
+let socket = new WebSocket("wss://192.168.0.100:8029");
 
 
 
@@ -32,19 +34,57 @@ function updateColor(colo) {
 
 document.getElementById("drawing-table").addEventListener("click", (e) => {
     if (!e.target.classList.contains("cell")) return;
-    e.target.style.backgroundColor = color
     let splitAr = e.target.classList.item(1).split("/");
-    matrix[splitAr[0]][splitAr[1]] = color;
-    socket.send(JSON.stringify({ com: "update", materials: [{ material: color, locx: splitAr[0], locy: splitAr[1], server: curserver }] }));
+    switch (tool) {
+        case 'brush':
+            console.log(`${parseInt(splitAr[0] + 1)}/${splitAr[1]}`);
+            switch (size) {
+                case 1:
+                    e.target.style.backgroundColor = color;
+                    socket.send(JSON.stringify({ com: "update", materials: [{ material: color, locx: splitAr[0], locy: splitAr[1], server: curserver }] }));
+                    break;
+
+                case 2:
+                    e.target.style.backgroundColor = color;
+                    document.getElementsByClassName(`${parseInt(splitAr[0]) + 1}/${splitAr[1]}`)[0].style.backgroundColor = color;
+                    document.getElementsByClassName(`${parseInt(splitAr[0]) - 1}/${splitAr[1]}`)[0].style.backgroundColor = color;
+                    document.getElementsByClassName(`${splitAr[0]}/${parseInt(splitAr[1]) + 1}`)[0].style.backgroundColor = color;
+                    document.getElementsByClassName(`${splitAr[0]}/${parseInt(splitAr[1]) - 1}`)[0].style.backgroundColor = color;
+                    socket.send(JSON.stringify({ com: "update", materials: [{ material: color, locx: splitAr[0], locy: splitAr[1], server: curserver }, { material: color, locx: parseInt(splitAr[0]) + 1, locy: splitAr[1], server: curserver }, { material: color, locx: parseInt(splitAr[0]) - 1, locy: splitAr[1], server: curserver }, { material: color, locx: splitAr[0], locy: parseInt(splitAr[1]) + 1, server: curserver }, { material: color, locx: splitAr[0], locy: parseInt(splitAr[1]) - 1, server: curserver }] }));
+                    break;
+            }
+            break;
+
+        case 'square':
+            drawSquare(splitAr[0], splitAr[1]);
+            break;
+    }
 });
 
 function dragOn(e) {
     if (!e.target.classList.contains("cell")) return;
-
-    e.target.style.backgroundColor = color
     let splitAr = e.target.classList.item(1).split("/");
-    matrix[splitAr[0]][splitAr[1]] = color;
-    changes.unshift({ com: "update", material: color, locx: splitAr[0], locy: splitAr[1], server: curserver });
+    switch (tool) {
+        case 'brush':
+            console.log(size);
+            switch (size) {
+                case 1:
+                    e.target.style.backgroundColor = color
+                    changes.unshift({ com: "update", material: color, locx: splitAr[0], locy: splitAr[1], server: curserver });
+                    break;
+
+                case 2:
+                    e.target.style.backgroundColor = color;
+                    document.getElementsByClassName(`${parseInt(splitAr[0]) + 1}/${splitAr[1]}`)[0].style.backgroundColor = color;
+                    document.getElementsByClassName(`${parseInt(splitAr[0]) - 1}/${splitAr[1]}`)[0].style.backgroundColor = color;
+                    document.getElementsByClassName(`${splitAr[0]}/${parseInt(splitAr[1]) + 1}`)[0].style.backgroundColor = color;
+                    document.getElementsByClassName(`${splitAr[0]}/${parseInt(splitAr[1]) - 1}`)[0].style.backgroundColor = color;
+                    changes.unshift({ material: color, locx: splitAr[0], locy: splitAr[1], server: curserver }, { material: color, locx: `${parseInt(splitAr[0]) + 1}`, locy: splitAr[1], server: curserver }, { material: color, locx: `${parseInt(splitAr[0]) - 1}`, locy: splitAr[1], server: curserver }, { material: color, locx: splitAr[0], locy: `${parseInt(splitAr[1]) + 1}`, server: curserver }, { material: color, locx: splitAr[0], locy: `${parseInt(splitAr[1]) - 1}`, server: curserver });
+                    break;
+            }
+
+            break;
+    }
 }
 
 document.getElementById("drawing-table").addEventListener("mousedown", () => {
@@ -52,13 +92,22 @@ document.getElementById("drawing-table").addEventListener("mousedown", () => {
 });
 document.addEventListener("mouseup", () => {
     document.getElementById("drawing-table").removeEventListener("mousemove", dragOn);
-    socket.send(JSON.stringify({ com: "update", materials: changes }));
+    const unique = Array.from(new Set(changes.map(a => `${a.locx}/${a.locy}`)))
+        .map(id => {
+            return changes.find(a => `${a.locx}/${a.locy}` === id)
+        })
+    socket.send(JSON.stringify({ com: "update", materials: unique }));
     changes = [];
 });
 
 socket.onopen = function(e) {
     socket.send(JSON.stringify({ com: "init", server: curserver }));
 };
+
+function changeServers() {
+    curserver = document.getElementById("serverpicker").value;
+    socket.send(JSON.stringify({ com: "init", server: curserver }));
+}
 
 socket.onclose = function(e) {
     alert("Connection to the server has been lost, please refresh your web page");
@@ -79,10 +128,6 @@ socket.onmessage = function(e) {
         }
     }
 };
-
-function swapServers(server) {
-    socket.send(JSON.stringify({ id: UUID, prevserv: curserv, newserv: server, con: con, com: "serverswap" }));
-}
 
 
 function showGrid() {
@@ -107,12 +152,25 @@ function showGrid() {
     }
 }
 
-function addBorder(elem) {
-    document.getElementById("tGrid").style.border = "2px solid rgb(17, 78, 199)";
+function switchTO(item, elem) {
+    tool = item;
+    elem.style.backgroundColor = "rgba(48, 96, 191, 0.5)";
+    elem.style.border = "2px solid rgb(17, 78, 199)";
 }
 
-function removeBorder(elem) {
-    if (!gridON) {
-        document.getElementById("tGrid").style.border = "2px solid transparent";
+function drawSquare(locx, locy) {
+    console.log(locx, locy)
+    switch (size) {
+        case 1:
+            document.getElementsByClassName(`${locx}/${locy}`)[0].style.backgroundColor = color;
+            document.getElementsByClassName(`${locx - 1}/${locy}`)[0].style.backgroundColor = color;
+            document.getElementsByClassName(`${locx}/${locy - 1}`)[0].style.backgroundColor = color;
+            document.getElementsByClassName(`${locx - 1}/${locy - 1}`)[0].style.backgroundColor = color;
+            socket.send(JSON.stringify({ com: "update", materials: [{ material: color, locx: locx, locy: locy, server: curserver }, { material: color, locx: locx - 1, locy: locy, server: curserver }, { material: color, locx: locx, locy: locy - 1, server: curserver }, { material: color, locx: locx - 1, locy: locy - 1, server: curserver }] }));
+            break;
     }
+}
+
+function changeSizes() {
+    size = parseInt(document.getElementById("sizepicker").value);
 }

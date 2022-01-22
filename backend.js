@@ -39,11 +39,13 @@ const fs = require('fs');
 
 
 const server = https.createServer({
-    cert: fs.readFileSync('./certificate.pem'),
+    cert: fs.readFileSync('./cert.pem'),
     key: fs.readFileSync('./key.pem')
-}).listen(8029);
+});
 
-const wss = new ws.WebSocket.Server({ server });
+server.listen(8029);
+
+const wss = new ws.WebSocketServer({ server: server });
 
 wss.on('connection', (con) => {
     con.on('message', async(data) => {
@@ -62,6 +64,7 @@ wss.on('connection', (con) => {
 
         } else if (data.com == "update") {
             for (ind of data.materials) {
+                console.log(ind)
                 table[ind.server][ind.locx][ind.locy] = ind.material;
             }
             keyv.set("main", table);
