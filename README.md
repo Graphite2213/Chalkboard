@@ -41,7 +41,8 @@ By some miracle it almost all worked when moved onto a server.
 Also i had to learn 2 things i didn't ever use before for this project:
 Websockets and HTTPS (getting the certificates delayed getting demo images and video for quite a while)
 
-You can find more technical difficulties on my slides
+You can find more technical difficulties on my [slides](https://docs.google.com/presentation/d/1kAgMKOdv-9svOVfeK0u6kQ9KZujvfCggvC3cjCrVTJk/edit?usp=sharing
+)
 
 ## Demo
 
