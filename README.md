@@ -29,6 +29,6 @@ By some miracle it almost all worked when moved onto a server.
 Also i had to learn 2 things i didn't ever use before for this project:
 Websockets and HTTPS (getting the certificates delayed getting demo images and video for quite a while)
 
-##Demo
+## Demo
 You can also see the current state of the canvas and participate in it yourself using [this](https://graphite2213.github.io/chalkboard.html)
 link.
