@@ -41,6 +41,8 @@ By some miracle it almost all worked when moved onto a server.
 Also i had to learn 2 things i didn't ever use before for this project:
 Websockets and HTTPS (getting the certificates delayed getting demo images and video for quite a while)
 
+You can find more technical difficulties on my slides
+
 ## Demo
 
 You can also see the current state of the canvas and participate in it yourself using [this](https://graphite2213.github.io/chalkboard.html)
@@ -49,7 +51,7 @@ link.
 Here is an image of the server #1 canvas after the first 10 hours:
 ![image](https://user-images.githubusercontent.com/88732099/150672822-254cb5e5-1eef-431f-885f-b61894eaa5a7.png)
 
-i was promptly asleep while this went down but it seems like at first there was fighting for canvas space, and there was some vandalism although people started asserting dominance by making larger and more beautiful drawinngs so it stopped. Also a single person seems to have taken over server #3 and #2:
+I was asleep while this went down but it seems like at first there was fighting for canvas space, and there was some vandalism although people started asserting dominance by making larger and more beautiful drawinngs so it stopped. Also a single person seems to have taken over server #3 and #2:
 
 < I Would insert an image here but its likely not appropriate for twitch and youtube >
 
