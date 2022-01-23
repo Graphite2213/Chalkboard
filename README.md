@@ -37,5 +37,9 @@ link.
 Here is an image of the canvas after the first 10 hours:
 ![image](https://user-images.githubusercontent.com/88732099/150672822-254cb5e5-1eef-431f-885f-b61894eaa5a7.png)
 
-i was promptly asleep while this went down but it seems like at first there was fighting for canvas space and there was some vandalism although people started asserting dominance by drawing larger and more beautiful images so it stopped. Also a single person seems to have taken over server #2:
+i was promptly asleep while this went down but it seems like at first there was fighting for canvas space, and there was some vandalism although people started asserting dominance by making larger and more beautiful drawinngs so it stopped. Also a single person seems to have taken over server #3:
+
+![image](https://user-images.githubusercontent.com/88732099/150673039-9c672466-5094-45fe-abe4-73d5263b7ed1.png)
+
+I had to censor it because its a giant penis and we dont want our boy pan to get banned on twitch/demonetised
 
