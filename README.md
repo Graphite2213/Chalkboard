@@ -18,6 +18,18 @@ mutual agreement to not destroy art.
 
 The in-site chat was initially not intended to exist but i decided to add it
 in the last moment as to provide easier communication between artists.
+## TL;DR
+
+The point of this project is to see if humans can function and cooperate in a completely anon environment where anyone can do anything (even if they might not want to).
+This social experiment has 2 outcomes:
+1. It gets overrun by people who just want to vandalize and nobody can draw anymore
+2. That doesn't happen
+
+As observed on sites like 4chan humans are much more violent and hateful when completely anonymous.
+
+### What i expect:
+
+Lots and lots of funny number jokes, sus jokes, people just blacking/whiting out anything that gets drawn. 
 
 ## More insight on the technical difficulties of this project
 This project was built mostly on my phone and im incredibly proud of
@@ -34,12 +46,11 @@ Websockets and HTTPS (getting the certificates delayed getting demo images and v
 You can also see the current state of the canvas and participate in it yourself using [this](https://graphite2213.github.io/chalkboard.html)
 link.
 
-Here is an image of the canvas after the first 10 hours:
+Here is an image of the server #1 canvas after the first 10 hours:
 ![image](https://user-images.githubusercontent.com/88732099/150672822-254cb5e5-1eef-431f-885f-b61894eaa5a7.png)
 
-i was promptly asleep while this went down but it seems like at first there was fighting for canvas space, and there was some vandalism although people started asserting dominance by making larger and more beautiful drawinngs so it stopped. Also a single person seems to have taken over server #3:
+i was promptly asleep while this went down but it seems like at first there was fighting for canvas space, and there was some vandalism although people started asserting dominance by making larger and more beautiful drawinngs so it stopped. Also a single person seems to have taken over server #3 and #2:
 
-![image](https://user-images.githubusercontent.com/88732099/150673039-9c672466-5094-45fe-abe4-73d5263b7ed1.png)
+< I Would insert an image here but its likely not appropriate for twitch and youtube >
 
-I had to censor it because its a giant penis and we dont want our boy pan to get banned on twitch/demonetised
-
+These images also prove how the internet's sense of humor has gone massively downhill since 2018. The most prominent jokes are Among Us and FNAF memes.
